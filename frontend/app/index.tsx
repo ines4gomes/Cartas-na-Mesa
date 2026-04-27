@@ -186,12 +186,6 @@ function DeckCard({
             <Text style={styles.deckLabel} testID={`home-deck-${deck.id}-label`}>
               {deck.label}
             </Text>
-            <Text
-              style={styles.deckDesc}
-              testID={`home-deck-${deck.id}-desc`}
-            >
-              {deck.description}
-            </Text>
           </View>
           <View
             style={[
