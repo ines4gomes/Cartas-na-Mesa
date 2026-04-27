@@ -1,0 +1,131 @@
+{
+  "project_name": "ENJUV Reflection Cards",
+  "app_type": "mobile_web_app",
+  "language": "pt-PT",
+  "theme": "light",
+  "design_archetype": {
+    "id": 1,
+    "name": "Organic & Earthy",
+    "rationale": "Patients/Users need warmth, calm, trust for spiritual and mental reflection. A grounded, natural, and minimalist design removes distractions and encourages vulnerability."
+  },
+  "colors": {
+    "background": "#FBF9F6",
+    "surface": "#FFFFFF",
+    "text_primary": "#2D3A34",
+    "text_secondary": "#5C6B64",
+    "border": "rgba(45, 58, 52, 0.08)",
+    "decks": {
+      "deck_12_15": {
+        "primary": "#E69F77",
+        "bg_soft": "rgba(230, 159, 119, 0.1)",
+        "label": "12-15 Anos",
+        "description": "Quebra-gelos, gratidão, alvos espirituais iniciais"
+      },
+      "deck_16_20": {
+        "primary": "#8CA595",
+        "bg_soft": "rgba(140, 165, 149, 0.1)",
+        "label": "16-20 Anos",
+        "description": "Relações familiares, identidade, crescimento pessoal"
+      },
+      "deck_21_30": {
+        "primary": "#6B7F8C",
+        "bg_soft": "rgba(107, 127, 140, 0.1)",
+        "label": "21-30 Anos",
+        "description": "Saúde mental, conversas difíceis, maturidade espiritual"
+      }
+    }
+  },
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "DM Sans",
+    "scale": {
+      "h1": "text-4xl tracking-tight font-semibold",
+      "h2": "text-2xl tracking-tight font-medium",
+      "h3": "text-xl font-medium",
+      "body_lg": "text-lg leading-relaxed",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm tracking-wide"
+    }
+  },
+  "spacing_and_layout": {
+    "container_padding": "p-6 md:p-8",
+    "card_radius": "rounded-3xl",
+    "button_radius": "rounded-2xl",
+    "shadows": {
+      "card_soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+      "card_hover": "shadow-[0_12px_40px_rgb(0,0,0,0.08)]"
+    }
+  },
+  "views_and_components": {
+    "home_screen": {
+      "layout": "Flex column, centered content, mobile-first constraint (max-w-md mx-auto).",
+      "header": "Title 'Dinâmicas' in h1, subtitle 'Escolhe o baralho para começar' in body text.",
+      "deck_list": "3 stacked large cards (Bento-style list). Each card uses its respective deck color as a subtle background or left-border accent. High padding (p-8).",
+      "test_ids": [
+        "home-deck-12-15-button",
+        "home-deck-16-20-button",
+        "home-deck-21-30-button"
+      ]
+    },
+    "card_screen": {
+      "layout": "Flex column, full height (h-screen). Top navigation bar with Back button and Progress pill.",
+      "top_nav": {
+        "back_button": "Minimalist chevron-left icon. Left aligned.",
+        "progress_pill": "Center aligned. E.g., '5 / 23'. Uses text_secondary and bg_soft of the active deck."
+      },
+      "active_card": {
+        "style": "Massive central card taking up 70vh. Pure white bg, soft shadow, 1px border. Flex center for text.",
+        "interaction": "Tap anywhere on the card. First tap reveals the question. Next tap advances to the next random question.",
+        "typography": "Question text must be large (text-2xl or text-3xl), centered, high contrast (#2D3A34)."
+      },
+      "test_ids": [
+        "deck-back-button",
+        "deck-progress-indicator",
+        "card-tap-area",
+        "card-question-text"
+      ]
+    },
+    "exhausted_screen": {
+      "layout": "Flex column, centered, inside the main card area or a full screen replacement.",
+      "content": "Message 'Baralho Concluído!' and 'Todas as cartas foram lidas. O baralho foi reiniciado.'",
+      "action": "Button 'Voltar ao Início' to go to home screen.",
+      "test_ids": [
+        "deck-exhausted-message",
+        "deck-reset-home-button"
+      ]
+    }
+  },
+  "motion_and_interactions": {
+    "card_transition": "Use Framer Motion. When tapping to reveal, use a subtle scale-up or 3D flip. When advancing to the next card, slide the current card out to the left and slide the new one in from the right.",
+    "list_stagger": "On the home screen, the 3 deck buttons should animate in with a slight stagger (0.1s delay each)."
+  },
+  "assets_and_media": {
+    "icons": "Use lucide-react (ChevronLeft, LayoutGrid, Layers, RefreshCcw).",
+    "images": "No external images required. Use pure CSS gradients, soft colored backgrounds, and minimalist typography to keep the app lightweight and distraction-free."
+  },
+  "instructions_to_main_agent": [
+    "Build this as a React (or Next.js) web application styled specifically for mobile viewports (max-w-md mx-auto, min-h-screen).",
+    "Use Tailwind CSS for all styling, strictly adhering to the colors and typography defined.",
+    "Include the fonts Outfit and DM Sans via Google Fonts.",
+    "Implement the card deck logic: Randomize array of questions on load, keep track of current index, prevent repeats until the array is fully traversed.",
+    "Ensure all data-testids are implemented exactly as specified.",
+    "Make the card tap target massive (the entire card surface) so passing the device and tapping is frictionless."
+  ],
+  "deck_data_mock": {
+    "deck_12_15": [
+      "Qual é a coisa pela qual estás mais grato hoje?",
+      "Se pudesses ter qualquer superpoder, qual seria e porquê?",
+      "Qual foi a melhor parte da tua semana?"
+    ],
+    "deck_16_20": [
+      "O que significa para ti ser autêntico?",
+      "Como descreverias a tua relação com a tua família neste momento?",
+      "Qual é o teu maior desafio pessoal atualmente?"
+    ],
+    "deck_21_30": [
+      "Como tens lidado com a tua saúde mental ultimamente?",
+      "Qual foi a conversa mais difícil que tiveste este ano e o que aprendeste com ela?",
+      "O que significa para ti a maturidade espiritual?"
+    ]
+  }
+}
