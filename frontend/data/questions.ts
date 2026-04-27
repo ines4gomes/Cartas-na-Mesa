@@ -25,7 +25,7 @@ export const DECKS: DeckMeta[] = [
   },
   {
     id: "21-30",
-    label: "21-30 Anos",
+    label: "21-35 Anos",
     description: "Saúde mental, conversas difíceis, maturidade espiritual",
     primary: "#6B7F8C",
     bgSoft: "rgba(107, 127, 140, 0.14)",
