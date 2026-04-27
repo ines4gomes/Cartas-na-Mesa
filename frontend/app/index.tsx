@@ -56,12 +56,19 @@ export default function Home() {
             ENJUV · DINÂMICAS
           </Text>
           <Text style={styles.title} testID="home-title">
-            Dinâmicas
+            Cartas na Mesa
           </Text>
           <Text style={styles.subtitle} testID="home-subtitle">
-            Escolhe o baralho para começar.{"\n"}Toca no ecrã e deixa a
-            conversa acontecer.
+            Este não é apenas um jogo de perguntas, é um convite para deixares as respostas automáticas à porta. O objetivo é simples: deixa a conversa acontecer.
           </Text>
+
+          <View style={styles.howItWorks} testID="home-how-it-works">
+            <Text style={styles.howTitle}>Como funciona</Text>
+            <HowStep n="1" title="Escolhe o teu grupo" desc="Seleciona a tua faixa etária." />
+            <HowStep n="2" title="Revela a carta" desc="Toca no ecrã para uma pergunta aleatória." />
+            <HowStep n="3" title="Sê real" desc="Responde com honestidade." />
+            <HowStep n="4" title="Passa o telemóvel" desc="Entrega à pessoa ao teu lado e descobre que partilham mais do que esperavas." />
+          </View>
         </Animated.View>
 
         <View style={styles.list}>
@@ -83,6 +90,29 @@ export default function Home() {
     </SafeAreaView>
   );
 }
+
+function HowStep({
+  n,
+  title,
+  desc,
+}: {
+  n: string;
+  title: string;
+  desc: string;
+}) {
+  return (
+    <View style={styles.howStep}>
+      <View style={styles.howNum}>
+        <Text style={styles.howNumText}>{n}</Text>
+      </View>
+      <View style={styles.howTextBlock}>
+        <Text style={styles.howStepTitle}>{title}</Text>
+        <Text style={styles.howStepDesc}>{desc}</Text>
+      </View>
+    </View>
+  );
+}
+
 
 function DeckCard({
   deck,
@@ -204,6 +234,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.textSecondary,
     lineHeight: 24,
+  },
+  howItWorks: {
+    marginTop: 28,
+    gap: 14,
+  },
+  howTitle: {
+    fontSize: 13,
+    letterSpacing: 2,
+    color: COLORS.textSecondary,
+    fontWeight: "700",
+    marginBottom: 4,
+    textTransform: "uppercase",
+  },
+  howStep: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 14,
+  },
+  howNum: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#2D3A34",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 2,
+  },
+  howNumText: {
+    color: "#FBF9F6",
+    fontSize: 13,
+    fontWeight: "700",
+  },
+  howTextBlock: { flex: 1 },
+  howStepTitle: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: COLORS.textPrimary,
+    marginBottom: 2,
+  },
+  howStepDesc: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    lineHeight: 20,
   },
   list: { gap: 16 },
   deckCard: {
