@@ -1,30 +1,264 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import { useRouter } from "expo-router";
+import { useEffect, useRef } from "react";
+import {
+  Animated,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { DECKS } from "../data/questions";
 
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+const COLORS = {
+  background: "#FBF9F6",
+  surface: "#FFFFFF",
+  textPrimary: "#2D3A34",
+  textSecondary: "#5C6B64",
+  border: "rgba(45, 58, 52, 0.08)",
+};
 
-export default function Index() {
-  console.log(EXPO_PUBLIC_BACKEND_URL, "EXPO_PUBLIC_BACKEND_URL");
+export default function Home() {
+  const router = useRouter();
+  const fade = useRef(new Animated.Value(0)).current;
+  const translate = useRef(new Animated.Value(16)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fade, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translate, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fade, translate]);
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/app-image.png")}
-        style={styles.image}
-      />
-    </View>
+    <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <Animated.View
+          style={[
+            styles.header,
+            { opacity: fade, transform: [{ translateY: translate }] },
+          ]}
+        >
+          <Text style={styles.eyebrow} testID="home-eyebrow">
+            ENJUV · DINÂMICAS
+          </Text>
+          <Text style={styles.title} testID="home-title">
+            Dinâmicas
+          </Text>
+          <Text style={styles.subtitle} testID="home-subtitle">
+            Escolhe o baralho para começar.{"\n"}Toca no ecrã e deixa a
+            conversa acontecer.
+          </Text>
+        </Animated.View>
+
+        <View style={styles.list}>
+          {DECKS.map((deck, i) => (
+            <DeckCard
+              key={deck.id}
+              deck={deck}
+              index={i}
+              onPress={() => router.push(`/deck/${deck.id}`)}
+            />
+          ))}
+        </View>
+
+        <Text style={styles.footer} testID="home-footer">
+          Cada carta é sorteada aleatoriamente.{"\n"}Sem repetições até o
+          baralho terminar.
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function DeckCard({
+  deck,
+  index,
+  onPress,
+}: {
+  deck: (typeof DECKS)[number];
+  index: number;
+  onPress: () => void;
+}) {
+  const fade = useRef(new Animated.Value(0)).current;
+  const translate = useRef(new Animated.Value(20)).current;
+  const scale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fade, {
+        toValue: 1,
+        duration: 500,
+        delay: 150 + index * 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translate, {
+        toValue: 0,
+        duration: 500,
+        delay: 150 + index * 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fade, translate, index]);
+
+  const onPressIn = () =>
+    Animated.spring(scale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      speed: 40,
+      bounciness: 0,
+    }).start();
+  const onPressOut = () =>
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 40,
+      bounciness: 6,
+    }).start();
+
+  return (
+    <Animated.View
+      style={{
+        opacity: fade,
+        transform: [{ translateY: translate }, { scale }],
+      }}
+    >
+      <Pressable
+        onPress={onPress}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        testID={`home-deck-${deck.id}-button`}
+        style={({ pressed }) => [
+          styles.deckCard,
+          {
+            backgroundColor: COLORS.surface,
+            borderColor: COLORS.border,
+          },
+          pressed && { backgroundColor: deck.bgSoft },
+        ]}
+      >
+        <View style={[styles.accent, { backgroundColor: deck.primary }]} />
+        <View style={styles.deckCardContent}>
+          <View style={styles.deckCardTextBlock}>
+            <Text style={styles.deckLabel} testID={`home-deck-${deck.id}-label`}>
+              {deck.label}
+            </Text>
+            <Text
+              style={styles.deckDesc}
+              testID={`home-deck-${deck.id}-desc`}
+            >
+              {deck.description}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.arrowCircle,
+              { backgroundColor: deck.bgSoft, borderColor: deck.primary },
+            ]}
+          >
+            <Ionicons name="arrow-forward" size={18} color={deck.primary} />
+          </View>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safe: { flex: 1, backgroundColor: COLORS.background },
+  scroll: {
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 48,
+    flexGrow: 1,
+  },
+  header: { marginBottom: 32 },
+  eyebrow: {
+    fontSize: 12,
+    letterSpacing: 2.5,
+    color: COLORS.textSecondary,
+    fontWeight: "600",
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
+    letterSpacing: -1,
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: COLORS.textSecondary,
+    lineHeight: 24,
+  },
+  list: { gap: 16 },
+  deckCard: {
+    borderWidth: 1,
+    borderRadius: 28,
+    padding: 4,
+    paddingLeft: 0,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.04,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 2,
+    flexDirection: "row",
+  },
+  accent: {
+    width: 5,
+    alignSelf: "stretch",
+    borderTopLeftRadius: 28,
+    borderBottomLeftRadius: 28,
+  },
+  deckCardContent: {
     flex: 1,
-    backgroundColor: "#0c0c0c",
+    padding: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  deckCardTextBlock: { flex: 1 },
+  deckLabel: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: COLORS.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 6,
+  },
+  deckDesc: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    lineHeight: 20,
+  },
+  arrowCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+  footer: {
+    marginTop: 40,
+    textAlign: "center",
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    lineHeight: 20,
   },
 });
